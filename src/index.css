@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+
+	--primary-indigo: #657afe;
+
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	min-height: 100vh;
+	background-color: var(--primary-indigo);
+}
+
+select {
+	cursor: pointer;
+	padding: 5px 10px;
+	border-radius: 8px;
+	border: 1px solid var(--primary-indigo);
+}
+select:is(:focus, :focus-within) {
+	outline: 2px solid hsla(232, 99%, 70%, 0.777);
+}
+
+@layer components {
+	.field {
+		@apply grid gap-2;
+	}
+
+	.label {
+		@apply text-base font-medium capitalize;
+	}
+
+	.drop__list {
+		@apply flex items-center gap-2 rounded-lg;
+	}
+
+	.result {
+		@apply font-medium text-center bg-gray-200 p-2 rounded-lg;
+	}
+
+	.drop-container {
+		@apply flex items-center justify-between gap-2;
+	}
+}
