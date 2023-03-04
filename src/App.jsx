@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import DropBox from "./Components/DropBox";
 import Form from "./Components/Form";
+import { calcRate } from "./Utils/calcRate";
 
 function App() {
-	const [fromCurrency, setFromCurrency] = useState({ curr: "AUD", value: 0 });
-	const [toCurrency, setToCurrency] = useState({ curr: "AUD", value: 0.0 });
+	const [amount, setAmount] = useState(1);
+	const [rate, setRate] = useState(1.0);
+	const [fromCurrency, setFromCurrency] = useState({ curr: "AUD", value: 1 });
+	const [toCurrency, setToCurrency] = useState({ curr: "AUD", value: 1 });
 	const [currencyList, setCurrencyList] = useState({});
 
 	useEffect(() => {
@@ -12,31 +15,36 @@ function App() {
 			"https://api.freecurrencyapi.com/v1/latest?apikey=0HI2KsUHCztlq0q51grQ70Y7x1YBJJvxUsrHDXaj"
 		)
 			.then((response) => response.json())
-			.then(({ data }) => setCurrencyList(data));
+			.then(({ data }) => {
+				setCurrencyList(data);
+			});
 	}, []);
 
 	function handleChange({ target }) {
-		const { id, value, type } = target;
-		const toCurr = toCurrency.curr;
-		const fromCurr = fromCurrency.curr;
-		if (type === "number") {
-			const toVal =
-				fromCurr === toCurr ? value : (currencyList[toCurr] * value).toFixed(3);
-			setFromCurrency((oldCurr) => ({ ...oldCurr, value }));
-			setToCurrency((oldCurr) => ({ ...oldCurr, value: toVal }));
-			return;
-		}
-
-		const toVal =
-			value === toCurr || fromCurr === value
+		const { id, type, value } = target;
+		const currentAmount = type === "number" ? value : amount;
+		const toCurr = type === "number" || id === "from" ? toCurrency.curr : value;
+		const toValue = type === "number" ? toCurrency.value : currencyList[toCurr];
+		const fromValue =
+			type === "number" || id === "to"
 				? fromCurrency.value
-				: (currencyList[value] * fromCurrency.value).toFixed(3);
-		if (id === "from") {
-			setFromCurrency((oldCurr) => ({ ...oldCurr, curr: value }));
-			setToCurrency((oldCurr) => ({ ...oldCurr, value: toVal }));
+				: currencyList[value];
+		const conRate = calcRate(currentAmount, toValue, fromValue);
+
+		setRate(conRate);
+		setAmount(currentAmount);
+	}
+
+	function handleSelect({ target }) {
+		const { id, value: curr } = target;
+		const toValue = currencyList[curr];
+
+		if (id === "to") {
+			setToCurrency({ curr, value: toValue });
 		} else {
-			setToCurrency({ curr: value, value: toVal });
+			setFromCurrency({ curr, value: toValue });
 		}
+		handleChange({ target });
 	}
 
 	return (
@@ -45,22 +53,21 @@ function App() {
 				<h1 className="font-bold text-center capitalize text-2xl text-indigo-500">
 					Currency converter
 				</h1>
-				<Form
-					fromCurrency={fromCurrency}
-					handleChange={handleChange}
-					toCurrency={toCurrency}
-				>
+				<Form handleChange={handleChange} amount={amount}>
 					<div className="drop-container">
 						<DropBox
 							label="from"
 							list={currencyList}
-							handleSelect={handleChange}
+							handleSelect={handleSelect}
 						/>
 						<DropBox
 							label="to"
 							list={currencyList}
-							handleSelect={handleChange}
+							handleSelect={handleSelect}
 						/>
+					</div>
+					<div className="result">
+						{amount} {fromCurrency.curr} = {rate} {toCurrency.curr}
 					</div>
 				</Form>
 			</article>

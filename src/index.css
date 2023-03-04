@@ -27,7 +27,7 @@ body {
 
 select {
 	cursor: pointer;
-	padding: 5px 10px;
+	padding: 5px 15px;
 	border-radius: 8px;
 	border: 1px solid var(--primary-indigo);
 }
@@ -44,6 +44,10 @@ select:is(:focus, :focus-within) {
 		@apply text-base font-medium capitalize;
 	}
 
+	.drop__box {
+		@apply flex items-center gap-2 flex-wrap;
+	}
+
 	.drop__list {
 		@apply flex items-center gap-2 rounded-lg;
 	}
@@ -53,6 +57,6 @@ select:is(:focus, :focus-within) {
 	}
 
 	.drop-container {
-		@apply flex items-center justify-between gap-2;
+		@apply flex items-center justify-between gap-4;
 	}
 }

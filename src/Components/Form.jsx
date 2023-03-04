@@ -1,6 +1,9 @@
-function Form({ children, fromCurrency, handleChange, toCurrency }) {
+function Form({ children, handleChange, amount }) {
 	return (
-		<form className="text-indigo-900 flex flex-col gap-3 mt-4">
+		<form
+			className="text-indigo-900 flex flex-col gap-6 mt-4"
+			onSubmit={(e) => e.preventDefault()}
+		>
 			<div className="field">
 				<label htmlFor="amount" className="label">
 					Enter Amount
@@ -10,16 +13,12 @@ function Form({ children, fromCurrency, handleChange, toCurrency }) {
 					type="number"
 					name="amount"
 					id="amount"
-					min={0}
-					value={fromCurrency.value}
+					min={1}
+					value={amount}
 					onChange={handleChange}
 				/>
 			</div>
 			{children}
-			<div className="result">
-				{fromCurrency.value} {fromCurrency.curr} = {toCurrency.value}{" "}
-				{toCurrency.curr}
-			</div>
 		</form>
 	);
 }
