@@ -8,8 +8,8 @@ function DropBox({ label, list, handleSelect }) {
 	});
 	return (
 		<div className="drop__box field">
-			<label htmlFor={label} className="label">
-				{label}
+			<label htmlFor={label} className="label min-w-[40px]">
+				{label}:
 			</label>
 			<div className="drop__list">
 				<select name="select-list" id={label} onChange={handleSelect}>

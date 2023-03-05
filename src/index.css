@@ -25,16 +25,6 @@ body {
 	background-color: var(--primary-indigo);
 }
 
-select {
-	cursor: pointer;
-	padding: 5px 15px;
-	border-radius: 8px;
-	border: 1px solid var(--primary-indigo);
-}
-select:is(:focus, :focus-within) {
-	outline: 2px solid hsla(232, 99%, 70%, 0.777);
-}
-
 @layer components {
 	.field {
 		@apply grid gap-2;
@@ -49,7 +39,11 @@ select:is(:focus, :focus-within) {
 	}
 
 	.drop__list {
-		@apply flex items-center gap-2 rounded-lg;
+		@apply flex-1 rounded-lg;
+	}
+
+	select {
+		@apply w-full text-center py-1 px-3 rounded-lg border border-primary-indigo focus:outline-primary-indigo;
 	}
 
 	.result {
@@ -57,6 +51,6 @@ select:is(:focus, :focus-within) {
 	}
 
 	.drop-container {
-		@apply flex items-center justify-between gap-4;
+		@apply flex flex-col gap-6;
 	}
 }

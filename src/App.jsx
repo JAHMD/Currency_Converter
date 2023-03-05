@@ -3,17 +3,26 @@ import DropBox from "./Components/DropBox";
 import Form from "./Components/Form";
 import { calcRate } from "./Utils/calcRate";
 
+const API_URL =
+	"https://api.freecurrencyapi.com/v1/latest?apikey=0HI2KsUHCztlq0q51grQ70Y7x1YBJJvxUsrHDXaj";
+const DEFAULT_CURRENCY_VALUE = 1.48;
+const DEFAULT_CURRENCY = "AUD";
+
 function App() {
 	const [amount, setAmount] = useState(1);
-	const [rate, setRate] = useState(1.0);
-	const [fromCurrency, setFromCurrency] = useState({ curr: "AUD", value: 1 });
-	const [toCurrency, setToCurrency] = useState({ curr: "AUD", value: 1 });
+	const [exchangeRate, setExchangeRate] = useState(1.0);
+	const [fromCurrency, setFromCurrency] = useState({
+		curr: DEFAULT_CURRENCY,
+		value: DEFAULT_CURRENCY_VALUE,
+	});
+	const [toCurrency, setToCurrency] = useState({
+		curr: DEFAULT_CURRENCY,
+		value: DEFAULT_CURRENCY_VALUE,
+	});
 	const [currencyList, setCurrencyList] = useState({});
 
 	useEffect(() => {
-		fetch(
-			"https://api.freecurrencyapi.com/v1/latest?apikey=0HI2KsUHCztlq0q51grQ70Y7x1YBJJvxUsrHDXaj"
-		)
+		fetch(API_URL)
 			.then((response) => response.json())
 			.then(({ data }) => {
 				setCurrencyList(data);
@@ -31,11 +40,11 @@ function App() {
 				: currencyList[value];
 		const conRate = calcRate(currentAmount, toValue, fromValue);
 
-		setRate(conRate);
+		setExchangeRate(conRate);
 		setAmount(currentAmount);
 	}
 
-	function handleSelect({ target }) {
+	function handleCurrencyChange({ target }) {
 		const { id, value: curr } = target;
 		const toValue = currencyList[curr];
 
@@ -58,16 +67,17 @@ function App() {
 						<DropBox
 							label="from"
 							list={currencyList}
-							handleSelect={handleSelect}
+							handleSelect={handleCurrencyChange}
 						/>
+						<i className="fa-solid fa-arrows-rotate mx-auto"></i>
 						<DropBox
 							label="to"
 							list={currencyList}
-							handleSelect={handleSelect}
+							handleSelect={handleCurrencyChange}
 						/>
 					</div>
 					<div className="result">
-						{amount} {fromCurrency.curr} = {rate} {toCurrency.curr}
+						{amount} {fromCurrency.curr} = {exchangeRate} {toCurrency.curr}
 					</div>
 				</Form>
 			</article>
