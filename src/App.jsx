@@ -19,6 +19,7 @@ function App() {
 		curr: DEFAULT_CURRENCY,
 		value: DEFAULT_CURRENCY_VALUE,
 	});
+	const [exchange, setExchange] = useState(false);
 	const [currencyList, setCurrencyList] = useState({});
 
 	useEffect(() => {
@@ -56,6 +57,15 @@ function App() {
 		handleChange({ target });
 	}
 
+	function handleExchange() {
+		setExchange((oldState) => !oldState);
+		console.log(toCurrency, fromCurrency);
+		const currRate = calcRate(amount, fromCurrency.value, toCurrency.value);
+		setFromCurrency(toCurrency);
+		setToCurrency(fromCurrency);
+		setExchangeRate(currRate);
+	}
+
 	return (
 		<main className="App w-full min-h-screen flex justify-center items-center p-6">
 			<article className="w-[350px] max-w-full bg-white p-8 rounded-lg">
@@ -69,7 +79,9 @@ function App() {
 							list={currencyList}
 							handleSelect={handleCurrencyChange}
 						/>
-						<i className="fa-solid fa-arrows-rotate mx-auto"></i>
+						<button className="exchange w-fit mx-auto" onClick={handleExchange}>
+							<i className="fa-solid fa-arrows-rotate mx-auto"></i>
+						</button>
 						<DropBox
 							label="to"
 							list={currencyList}
