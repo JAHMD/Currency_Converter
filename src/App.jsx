@@ -75,7 +75,7 @@ function App() {
 				<Form handleChange={handleChange} amount={amount}>
 					<div className="drop-container">
 						<DropBox
-							label="from"
+							label={exchange ? "to" : "from"}
 							list={currencyList}
 							handleSelect={handleCurrencyChange}
 						/>
@@ -83,7 +83,7 @@ function App() {
 							<i className="fa-solid fa-arrows-rotate mx-auto"></i>
 						</button>
 						<DropBox
-							label="to"
+							label={exchange ? "from" : "to"}
 							list={currencyList}
 							handleSelect={handleCurrencyChange}
 						/>
